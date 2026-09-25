@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lesson 25 Quiz – Global Problems</title>
+<style>
+  :root{
+    --bg: #f4f6f8;
+    --slide-bg: #ffffff;
+    --text: #1f2937;
+    --heading: #0f3d5c;
+    --accent: #1f7a5c;
+    --accent-bg: #e6f2ee;
+    --muted: #5b6672;
+    --border: #dfe4e8;
+    --amber: #b8860b;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12181d; --slide-bg:#1b232a; --text:#e7ecef; --heading:#8fd0e8;
+      --accent:#5fcf9f; --accent-bg:#233530; --muted:#9aa7b0; --border:#2c363d;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12181d; --slide-bg:#1b232a; --text:#e7ecef; --heading:#8fd0e8;
+    --accent:#5fcf9f; --accent-bg:#233530; --muted:#9aa7b0; --border:#2c363d;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    height:100%;
+    margin:0;
+    font-family: Georgia, "Times New Roman", serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  .deck{
+    min-height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: env(safe-area-inset-top,0px) 16px calc(env(safe-area-inset-bottom,0px) + 80px);
+  }
+  .slide{
+    display:none;
+    width:min(900px, 94vw);
+    max-height:82vh;
+    background: var(--slide-bg);
+    border-radius:14px;
+    box-shadow: 0 10px 30px rgba(15,61,92,0.15);
+    padding: 42px 50px;
+    overflow-y:auto;
+    flex-direction:column;
+  }
+  .slide.active{display:flex;}
+  .eyebrow{
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    font-size:13px;
+    color: var(--accent);
+    font-weight:700;
+    margin-bottom:10px;
+  }
+  h1{
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size:34px;
+    color: var(--heading);
+    margin:0 0 6px 0;
+    line-height:1.25;
+  }
+  h2{
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size:23px;
+    color: var(--heading);
+    margin:0 0 18px 0;
+    border-bottom: 3px solid var(--accent-bg);
+    padding-bottom:12px;
+    line-height:1.4;
+  }
+  h3{
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size:18px;
+    color: var(--heading);
+    margin: 0 0 10px 0;
+  }
+  .subtitle{
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    color: var(--muted);
+    font-size:16px;
+    margin-bottom: 6px;
+  }
+  p{
+    font-size:18px;
+    line-height:1.6;
+    margin: 0 0 14px 0;
+  }
+  .question-text{
+    font-size:21px;
+    line-height:1.7;
+    background: var(--accent-bg);
+    padding:18px 20px;
+    border-radius:10px;
+    margin-bottom:22px;
+  }
+  .blank{
+    font-weight:700;
+    color: var(--amber);
+    letter-spacing:1px;
+  }
+  .title-slide{
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+  }
+  .title-slide h1{ font-size:38px; }
+  .divider{
+    width:70px; height:4px; background: var(--accent);
+    margin: 18px auto; border-radius:2px;
+  }
+  .pill-wrap{
+    display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:8px;
+  }
+  .pill{
+    font-family:"Helvetica Neue", Arial, sans-serif;
+    font-size:14px;
+    background: var(--accent-bg);
+    color: var(--accent);
+    padding:6px 14px;
+    border-radius:20px;
+    font-weight:700;
+  }
+  .reveal-btn{
+    font-family:"Helvetica Neue", Arial, sans-serif;
+    align-self:flex-start;
+    background: var(--heading);
+    color:#fff;
+    border:none;
+    padding:11px 20px;
+    border-radius:8px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    margin-bottom:16px;
+    transition: background 0.2s;
+  }
+  .reveal-btn:hover{ background: var(--accent); }
+  .reveal-content{
+    display:none;
+    background: var(--accent-bg);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 18px 22px;
+  }
+  .reveal-content.open{ display:block; }
+  .answer-line{ font-size:19px; margin-bottom:10px; }
+  .answer-word{
+    color: var(--accent);
+    font-weight:700;
+    text-transform: uppercase;
+    letter-spacing:0.5px;
+  }
+  .teach-label{
+    font-family:"Helvetica Neue", Arial, sans-serif;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color: var(--muted);
+    font-weight:700;
+    margin: 12px 0 4px 0;
+  }
+  .colloc-list, .colloc-grid, .key-grid, .frame-list{
+    margin:0; padding-left:20px;
+  }
+  .colloc-list li, .frame-list li{ margin-bottom:4px; font-size:17px; }
+  .colloc-grid{
+    columns: 2;
+    column-gap: 30px;
+    list-style: disc;
+  }
+  .colloc-grid li{ font-size:18px; margin-bottom:10px; break-inside: avoid; }
+  .key-grid{
+    list-style:none; padding:0; margin:0;
+    display:grid; grid-template-columns: repeat(2, 1fr); gap:10px 24px;
+  }
+  .key-grid li{
+    font-size:18px;
+    background: var(--accent-bg);
+    padding:10px 14px;
+    border-radius:8px;
+  }
+  .key-num{ color: var(--accent); font-weight:700; margin-right:6px; }
+  .frame-grid{
+    display:grid; grid-template-columns: 1fr 1fr; gap: 26px;
+  }
+  .frame-block h3{
+    border-bottom: 2px solid var(--accent-bg);
+    padding-bottom:8px;
+  }
+  .nav{
+    position:fixed;
+    bottom: calc(18px + env(safe-area-inset-bottom,0px));
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    align-items:center;
+    gap:16px;
+    font-family:"Helvetica Neue", Arial, sans-serif;
+    background: var(--slide-bg);
+    padding:9px 16px;
+    border-radius:30px;
+    box-shadow: 0 4px 14px rgba(15,61,92,0.2);
+    border: 1px solid var(--border);
+    z-index:10;
+  }
+  .nav button{
+    border:none;
+    background: var(--heading);
+    color:white;
+    width:36px; height:36px;
+    border-radius:50%;
+    font-size:17px;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .nav button:hover{ background: var(--accent); }
+  .nav button:disabled{ background:#9aa7b0; cursor:default; opacity:0.5;}
+  .counter{ font-size:13px; color: var(--muted); min-width:56px; text-align:center; }
+  @media (max-width:600px){
+    .slide{ padding:28px 22px; }
+    h1{ font-size:26px; }
+    h2{ font-size:19px; }
+    p, .colloc-list li, .colloc-grid li, .key-grid li{ font-size:16px; }
+    .question-text{ font-size:18px; }
+    .colloc-grid{ columns:1; }
+    .key-grid{ grid-template-columns: 1fr 1fr; }
+    .frame-grid{ grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+
+<div class="slide title-slide">
+  <div class="eyebrow">Quiz</div>
+  <h1>Lesson 25 Quiz – Global Problems</h1>
+  <div class="divider"></div>
+  <p class="subtitle">Vocabulary Bank</p>
+  <p style="max-width:680px;margin:0 auto 18px;">Use the words below to complete each sentence in the debate that follows.</p>
+  <div class="pill-wrap"><span class="pill">alleviating</span><span class="pill">endangered</span><span class="pill">irreparable</span><span class="pill">shelters</span><span class="pill">clean</span><span class="pill">fossil</span><span class="pill">line</span><span class="pill">shortages</span><span class="pill">climate</span><span class="pill">harming</span><span class="pill">margins</span><span class="pill">warming</span><span class="pill">disadvantaged</span><span class="pill">hunger</span><span class="pill">renewable</span><span class="pill">welfare</span></div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Question 1 of 16</div>
+  <h2>Fill in the Blank</h2>
+  <p class="question-text">Jim: If I'm elected, my number one priority will be <span class="blank">__________</span> poverty.</p>
+  <button class="reveal-btn">Show Answer</button>
+  <div class="reveal-content">
+    <p class="answer-line">Answer: <span class="answer-word">alleviating</span></p>
+    <p class="teach-label">Teaching point</p>
+    <p>Alleviate poverty = reduce the seriousness or effects of poverty.</p>
+    <p class="teach-label">Useful collocations</p>
+    <ul class="colloc-list"><li>alleviate poverty</li><li>alleviate suffering</li><li>alleviate the problem</li></ul>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Question 2 of 16</div>
+  <h2>Fill in the Blank</h2>
+  <p class="question-text">A large portion of our country's population lives below the poverty <span class="blank">__________</span>.</p>
+  <button class="reveal-btn">Show Answer</button>
+  <div class="reveal-content">
+    <p class="answer-line">Answer: <span class="answer-word">line</span></p>
+    <p class="teach-label">Teaching point</p>
+    <p>Below the poverty line means living with an income below the minimum level considered necessary to meet basic needs.</p>
+    <p class="teach-label">Useful collocations</p>
+    <ul class="colloc-list"><li>live below the poverty line</li><li>fall below the poverty line</li><li>cross the poverty line</li></ul>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Question 3 of 16</div>
+  <h2>Fill in the Blank</h2>
+  <p class="question-text">Young people from <span class="blank">__________</span> backgrounds are more likely to experience serious social and economic difficulties.</p>
+  <button class="reveal-btn">Show Answer</button>
+  <div class="reveal-content">
+    <p class="answer-line">Answer: <span class="answer-word">disadvantaged</span></p>
+    <p class="teach-label">Teaching point</p>
+    <p>A disadvantaged background refers to a situation in which someone has fewer social, economic, or educational opportunities.</p>
+    <p class="teach-label">Useful collocations</p>
+    <ul class="colloc-list"><li>disadvantaged background</li><li>disadvantaged communities</li><li>disadvantaged children</li></ul>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Question 4 of 16</div>
+  <h2>Fill in the Blank</h2>
+  <p class="question-text">My opponent wants to cut funding for the <span class="blank">__________</span> program.</p>
+  <button class="reveal-btn">Show Answer</button>
+  <div class="reveal-content">
+    <p class="answer-line">Answer: <span class="answer-word">welfare</span></p>
+    <p class="teach-label">Teaching point</p>
+    <p>A welfare program provides financial or social support to people who need assistance.</p>
+    <p class="teach-label">Useful collocations</p>
+    <ul class="colloc-list"><li>welfare program</li><li>welfare system</li><li>receive welfare</li></ul>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Question 5 of 16</div>
+  <h2>Fill in the Blank</h2>
+  <p class="question-text">Opening up more homeless <span class="blank">__________</span> is not a long-term solution.</p>
+  <button class="reveal-btn">Show Answer</button>
+  <div class="reveal-content">
+    <p class="answer-line">Answer: <span class="answer-word">shelters</span></p>
+    <p class="teach-label">Teaching point</p>
+    <p>A homeless shelter is a place where people without homes can temporarily live or receive support.</p>
+    <p class="teach-label">Useful collocations</p>
+    <ul class="colloc-list"><li>homeless shelter</li><li>emergency shelter</li><li>provide shelter</li></ul>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Question 6 of 16</div>
+  <h2>Fill in the Blank</h2>
+  <p class="question-text">We must help people who live on the <span class="blank">__________</span> of society.</p>
+  <button class="reveal-btn">Show Answer</button>
+  <div class="reveal-content">
+    <p class="answer-line">Answer: <span class="answer-word">margins</span></p>
+    <p class="teach-label">Teaching point</p>
+    <p>Live on the margins of society means to have limited participation in mainstream social and economic life.</p>
+    <p class="teach-label">Useful collocations</p>
+    <ul class="colloc-list"><li>live on the margins of society</li><li>people on the margins</li><li>marginalized communities</li></ul>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Question 7 of 16</div>
+  <h2>Fill in the Blank</h2>
+  <p class="question-text">Investing in <span class="blank">__________</span> energy will enable us to grow our economy without damaging the environment.</p>
+  <button class="reveal-btn">Show Answer</button>
+  <div class="reveal-content">
+    <p class="answer-line">Answer: <span class="answer-word">clean</span></p>
+    <p class="teach-label">Teaching point</p>
+    <p>Clean energy refers to energy that produces little or no pollution.</p>
+    <p class="teach-label">Useful collocations</p>
+    <ul class="colloc-list"><li>clean energy</li><li>clean technology</li><li>clean energy sources</li></ul>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Question 8 of 16</div>
+  <h2>Fill in the Blank</h2>
+  <p class="question-text">We need economic growth without <span class="blank">__________</span> the environment.</p>
+  <button class="reveal-btn">Show Answer</button>
+  <div class="reveal-content">
+    <p class="answer-line">Answer: <span class="answer-word">harming</span></p>
+    <p class="teach-label">Teaching point</p>
+    <p>Harm the environment means to cause damage to the natural world.</p>
+    <p class="teach-label">Useful collocations</p>
+    <ul class="colloc-list"><li>harm the environment</li><li>cause environmental damage</li><li>reduce environmental harm</li></ul>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Question 9 of 16</div>
+  <h2>Fill in the Blank</h2>
+  <p class="question-text">Citizens who are dying of <span class="blank">__________</span> may not see environmental protection as their most urgent problem.</p>
+  <button class="reveal-btn">Show Answer</button>
+  <div class="reveal-content">
+    <p class="answer-line">Answer: <span class="answer-word">hunger</span></p>
+    <p class="teach-label">Teaching point</p>
+    <p>Die of hunger means to die because of a severe lack of food.</p>
+    <p class="teach-label">Useful collocations</p>
+    <ul class="colloc-list"><li>die of hunger</li><li>suffer from hunger</li><li>fight hunger</li></ul>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Question 10 of 16</div>
+  <h2>Fill in the Blank</h2>
+  <p class="question-text">We need to protect <span class="blank">__________</span> species from disappearing.</p>
+  <button class="reveal-btn">Show Answer</button>
+  <div class="reveal-content">
+    <p class="answer-line">Answer: <span class="answer-word">endangered</span></p>
+    <p class="teach-label">Teaching point</p>
+    <p>An endangered species is an animal or plant species at risk of extinction.</p>
+    <p class="teach-label">Useful collocations</p>
+    <ul class="colloc-list"><li>endangered species</li><li>protect endangered species</li><li>endangered animals</li></ul>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Question 11 of 16</div>
+  <h2>Fill in the Blank</h2>
+  <p class="question-text">We should take action to prevent global <span class="blank">__________</span>.</p>
+  <button class="reveal-btn">Show Answer</button>
+  <div class="reveal-content">
+    <p class="answer-line">Answer: <span class="answer-word">warming</span></p>
+    <p class="teach-label">Teaching point</p>
+    <p>Global warming refers to the long-term increase in Earth's average temperature.</p>
+    <p class="teach-label">Useful collocations</p>
+    <ul class="colloc-list"><li>global warming</li><li>slow global warming</li><li>contribute to global warming</li></ul>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Question 12 of 16</div>
+  <h2>Fill in the Blank</h2>
+  <p class="question-text">It is scientifically possible that humans have caused <span class="blank">__________</span> damage to some parts of the planet.</p>
+  <button class="reveal-btn">Show Answer</button>
+  <div class="reveal-content">
+    <p class="answer-line">Answer: <span class="answer-word">irreparable</span></p>
+    <p class="teach-label">Teaching point</p>
+    <p>Irreparable damage means damage that cannot be repaired or completely reversed.</p>
+    <p class="teach-label">Useful collocations</p>
+    <ul class="colloc-list"><li>cause irreparable damage</li><li>suffer irreparable damage</li><li>irreparable harm</li></ul>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Question 13 of 16</div>
+  <h2>Fill in the Blank</h2>
+  <p class="question-text">Due to <span class="blank">__________</span> change, rainfall patterns have changed.</p>
+  <button class="reveal-btn">Show Answer</button>
+  <div class="reveal-content">
+    <p class="answer-line">Answer: <span class="answer-word">climate</span></p>
+    <p class="teach-label">Teaching point</p>
+    <p>Climate change refers to long-term changes in temperature, rainfall, and other weather patterns.</p>
+    <p class="teach-label">Useful collocations</p>
+    <ul class="colloc-list"><li>climate change</li><li>address climate change</li><li>tackle climate change</li><li>effects of climate change</li></ul>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Question 14 of 16</div>
+  <h2>Fill in the Blank</h2>
+  <p class="question-text">Climate change can result in food <span class="blank">__________</span>.</p>
+  <button class="reveal-btn">Show Answer</button>
+  <div class="reveal-content">
+    <p class="answer-line">Answer: <span class="answer-word">shortages</span></p>
+    <p class="teach-label">Teaching point</p>
+    <p>A food shortage happens when there is not enough food available to meet people's needs.</p>
+    <p class="teach-label">Useful collocations</p>
+    <ul class="colloc-list"><li>food shortages</li><li>water shortages</li><li>energy shortages</li></ul>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Question 15 of 16</div>
+  <h2>Fill in the Blank</h2>
+  <p class="question-text">We need to reduce our dependence on <span class="blank">__________</span> fuels.</p>
+  <button class="reveal-btn">Show Answer</button>
+  <div class="reveal-content">
+    <p class="answer-line">Answer: <span class="answer-word">fossil</span></p>
+    <p class="teach-label">Teaching point</p>
+    <p>Fossil fuels include coal, oil, and natural gas.</p>
+    <p class="teach-label">Useful collocations</p>
+    <ul class="colloc-list"><li>fossil fuels</li><li>burn fossil fuels</li><li>dependence on fossil fuels</li><li>reduce fossil fuel consumption</li></ul>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Question 16 of 16</div>
+  <h2>Fill in the Blank</h2>
+  <p class="question-text">We should start using <span class="blank">__________</span> resources instead.</p>
+  <button class="reveal-btn">Show Answer</button>
+  <div class="reveal-content">
+    <p class="answer-line">Answer: <span class="answer-word">renewable</span></p>
+    <p class="teach-label">Teaching point</p>
+    <p>Renewable resources are resources that can naturally be replaced or used repeatedly.</p>
+    <p class="teach-label">Useful collocations</p>
+    <ul class="colloc-list"><li>renewable resources</li><li>renewable energy</li><li>renewable sources</li></ul>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Answer Key</div>
+  <h2>Complete Answer Key</h2>
+  <ul class="key-grid"><li><span class="key-num">1.</span> alleviating</li><li><span class="key-num">2.</span> line</li><li><span class="key-num">3.</span> disadvantaged</li><li><span class="key-num">4.</span> welfare</li><li><span class="key-num">5.</span> shelters</li><li><span class="key-num">6.</span> margins</li><li><span class="key-num">7.</span> clean</li><li><span class="key-num">8.</span> harming</li><li><span class="key-num">9.</span> hunger</li><li><span class="key-num">10.</span> endangered</li><li><span class="key-num">11.</span> warming</li><li><span class="key-num">12.</span> irreparable</li><li><span class="key-num">13.</span> climate</li><li><span class="key-num">14.</span> shortages</li><li><span class="key-num">15.</span> fossil</li><li><span class="key-num">16.</span> renewable</li></ul>
+</div>
+
+
+<div class="slide title-slide">
+  <div class="eyebrow">Speaking</div>
+  <h1>Discussion – Global Problems</h1>
+  <div class="divider"></div>
+  <p style="max-width:600px;margin:0 auto;">Use the vocabulary and collocations from the lesson when answering the questions. Click each question to reveal a sample answer and teaching point.</p>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Discussion 1 of 20</div>
+  <h2>What do you think is the most serious global problem today? Why?</h2>
+  <button class="reveal-btn">Show Sample Answer</button>
+  <div class="reveal-content">
+    <p class="teach-label">Sample answer</p>
+    <p>I think climate change is one of the most serious global problems because it can affect food production, water supplies, and people's health. It can also lead to more extreme weather events.</p>
+    <p class="teach-label">Teaching point</p>
+    <p>Use "one of the most serious + plural noun" when discussing major problems.</p>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Discussion 2 of 20</div>
+  <h2>What can governments do to alleviate poverty?</h2>
+  <button class="reveal-btn">Show Sample Answer</button>
+  <div class="reveal-content">
+    <p class="teach-label">Sample answer</p>
+    <p>Governments can alleviate poverty by creating jobs, improving education, and providing effective welfare programs for people who need financial support.</p>
+    <p class="teach-label">Teaching point</p>
+    <p>Alleviate poverty = reduce the effects or seriousness of poverty.</p>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Discussion 3 of 20</div>
+  <h2>Why do some families live below the poverty line?</h2>
+  <button class="reveal-btn">Show Sample Answer</button>
+  <div class="reveal-content">
+    <p class="teach-label">Sample answer</p>
+    <p>Some families live below the poverty line because they have low-paying jobs, limited access to education, or no stable employment. In some areas, there are simply not enough economic opportunities.</p>
+    <p class="teach-label">Teaching point</p>
+    <p>Live below the poverty line is a fixed and useful collocation.</p>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Discussion 4 of 20</div>
+  <h2>How can poverty affect children's lives?</h2>
+  <button class="reveal-btn">Show Sample Answer</button>
+  <div class="reveal-content">
+    <p class="teach-label">Sample answer</p>
+    <p>Poverty can affect children's education, health, and future opportunities. In extreme situations, children may suffer from hunger or even become involved in child labor.</p>
+    <p class="teach-label">Teaching point</p>
+    <p>Use suffer from + problem/condition: suffer from hunger, suffer from poverty.</p>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Discussion 5 of 20</div>
+  <h2>Why are some people forced to live on the margins of society?</h2>
+  <button class="reveal-btn">Show Sample Answer</button>
+  <div class="reveal-content">
+    <p class="teach-label">Sample answer</p>
+    <p>People may live on the margins of society because of poverty, unemployment, discrimination, homelessness, or a lack of education and social support.</p>
+    <p class="teach-label">Teaching point</p>
+    <p>Live on the margins of society describes social or economic exclusion.</p>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Discussion 6 of 20</div>
+  <h2>Do welfare programs really help alleviate poverty?</h2>
+  <button class="reveal-btn">Show Sample Answer</button>
+  <div class="reveal-content">
+    <p class="teach-label">Sample answer</p>
+    <p>I think welfare programs can help people survive difficult periods, especially when they are unemployed. However, long-term solutions should also focus on education, employment, and economic opportunities.</p>
+    <p class="teach-label">Teaching point</p>
+    <p>Use "can help + object + verb": can help people survive.</p>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Discussion 7 of 20</div>
+  <h2>What should governments do to reduce dependence on fossil fuels?</h2>
+  <button class="reveal-btn">Show Sample Answer</button>
+  <div class="reveal-content">
+    <p class="teach-label">Sample answer</p>
+    <p>Governments should invest in renewable energy such as solar and wind power. They can also encourage businesses and individuals to use cleaner forms of transportation.</p>
+    <p class="teach-label">Teaching point</p>
+    <p>Reduce dependence on + noun is a useful formal collocation.</p>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Discussion 8 of 20</div>
+  <h2>What are the advantages of renewable energy?</h2>
+  <button class="reveal-btn">Show Sample Answer</button>
+  <div class="reveal-content">
+    <p class="teach-label">Sample answer</p>
+    <p>Renewable energy can reduce pollution and our dependence on fossil fuels. It can also provide a more sustainable source of energy for the future.</p>
+    <p class="teach-label">Teaching point</p>
+    <p>Renewable energy and fossil fuels are natural contrasting collocations.</p>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Discussion 9 of 20</div>
+  <h2>How does climate change affect ordinary people?</h2>
+  <button class="reveal-btn">Show Sample Answer</button>
+  <div class="reveal-content">
+    <p class="teach-label">Sample answer</p>
+    <p>Climate change can affect people's lives through extreme temperatures, changing rainfall patterns, food shortages, and natural disasters. It can also increase the cost of food and water.</p>
+    <p class="teach-label">Teaching point</p>
+    <p>Use affect + person/thing directly: Climate change affects people.</p>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Discussion 10 of 20</div>
+  <h2>Do you think humans have caused irreparable damage to the planet?</h2>
+  <button class="reveal-btn">Show Sample Answer</button>
+  <div class="reveal-content">
+    <p class="teach-label">Sample answer</p>
+    <p>I think humans have caused serious environmental damage, but I don't think every problem is necessarily irreparable. If governments and individuals take action, some of the damage can still be reduced.</p>
+    <p class="teach-label">Teaching point</p>
+    <p>Irreparable damage = damage that cannot be repaired or reversed.</p>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Discussion 11 of 20</div>
+  <h2>Why are some animal species endangered?</h2>
+  <button class="reveal-btn">Show Sample Answer</button>
+  <div class="reveal-content">
+    <p class="teach-label">Sample answer</p>
+    <p>Many species are endangered because of habitat destruction, pollution, climate change, and illegal hunting. Human activity has had a major effect on wildlife.</p>
+    <p class="teach-label">Teaching point</p>
+    <p>Use endangered species rather than dangerous species. They have completely different meanings.</p>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Discussion 12 of 20</div>
+  <h2>What can individuals do to protect endangered species?</h2>
+  <button class="reveal-btn">Show Sample Answer</button>
+  <div class="reveal-content">
+    <p class="teach-label">Sample answer</p>
+    <p>Individuals can support environmental organizations, avoid products that harm wildlife, reduce pollution, and learn more about endangered species.</p>
+    <p class="teach-label">Teaching point</p>
+    <p>Useful pattern: support + organization/cause.</p>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Discussion 13 of 20</div>
+  <h2>Why do food shortages happen?</h2>
+  <button class="reveal-btn">Show Sample Answer</button>
+  <div class="reveal-content">
+    <p class="teach-label">Sample answer</p>
+    <p>Food shortages can happen because of droughts, floods, wars, poverty, climate change, or problems with agricultural production.</p>
+    <p class="teach-label">Teaching point</p>
+    <p>The same structure works with other shortages: food shortages, water shortages, energy shortages.</p>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Discussion 14 of 20</div>
+  <h2>How can climate change contribute to food shortages?</h2>
+  <button class="reveal-btn">Show Sample Answer</button>
+  <div class="reveal-content">
+    <p class="teach-label">Sample answer</p>
+    <p>Climate change can cause droughts, floods, and changes in rainfall patterns. These problems can reduce agricultural production and eventually lead to food shortages.</p>
+    <p class="teach-label">Teaching point</p>
+    <p>Contribute to + noun means to be one of the causes of something.</p>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Discussion 15 of 20</div>
+  <h2>Should governments provide more homeless shelters?</h2>
+  <button class="reveal-btn">Show Sample Answer</button>
+  <div class="reveal-content">
+    <p class="teach-label">Sample answer</p>
+    <p>I think homeless shelters can provide important short-term support. However, governments should also address the causes of homelessness, such as high housing costs, unemployment, and poverty.</p>
+    <p class="teach-label">Teaching point</p>
+    <p>Contrast short-term and long-term solutions with "However…"</p>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Discussion 16 of 20</div>
+  <h2>Why do some companies use child labor?</h2>
+  <button class="reveal-btn">Show Sample Answer</button>
+  <div class="reveal-content">
+    <p class="teach-label">Sample answer</p>
+    <p>Some companies may use child labor because it is cheaper. In extremely poor communities, families may also feel that children need to work because they struggle to make ends meet.</p>
+    <p class="teach-label">Teaching point</p>
+    <p>Make ends meet = have enough money to pay for basic living expenses.</p>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Discussion 17 of 20</div>
+  <h2>What problems can people from disadvantaged backgrounds face?</h2>
+  <button class="reveal-btn">Show Sample Answer</button>
+  <div class="reveal-content">
+    <p class="teach-label">Sample answer</p>
+    <p>People from disadvantaged backgrounds may have fewer opportunities in education and employment. They may also have greater difficulty accessing healthcare and other essential services.</p>
+    <p class="teach-label">Teaching point</p>
+    <p>Disadvantaged background is a common formal collocation in discussions about inequality.</p>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Discussion 18 of 20</div>
+  <h2>How can we reduce the gap between rich and poor?</h2>
+  <button class="reveal-btn">Show Sample Answer</button>
+  <div class="reveal-content">
+    <p class="teach-label">Sample answer</p>
+    <p>We can reduce the gap by improving access to education, creating better employment opportunities, supporting low-income families, and making healthcare more accessible.</p>
+    <p class="teach-label">Teaching point</p>
+    <p>Useful collocation: reduce/narrow the gap between the rich and poor.</p>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Discussion 19 of 20</div>
+  <h2>Which global problem is most closely connected to other problems?</h2>
+  <button class="reveal-btn">Show Sample Answer</button>
+  <div class="reveal-content">
+    <p class="teach-label">Sample answer</p>
+    <p>I think poverty is closely connected to many other problems. It can contribute to hunger, poor healthcare, child labor, homelessness, and even human trafficking.</p>
+    <p class="teach-label">Teaching point</p>
+    <p>Use be closely connected to when explaining relationships between problems.</p>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Discussion 20 of 20</div>
+  <h2>What can ordinary people do to help solve global problems?</h2>
+  <button class="reveal-btn">Show Sample Answer</button>
+  <div class="reveal-content">
+    <p class="teach-label">Sample answer</p>
+    <p>Ordinary people can reduce waste, save energy, use public transportation, support environmental organizations, donate to reliable charities, and become more aware of global problems. Individual actions may seem small, but they can contribute to wider change.</p>
+    <p class="teach-label">Teaching point</p>
+    <p>Use contribute to + noun: Individual actions can contribute to positive change.</p>
+  </div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Key Collocations</div>
+  <h2>Environment</h2>
+  <ul class="colloc-grid"><li>protect the environment</li><li>preserve the environment</li><li>burn fossil fuels</li><li>global warming</li><li>climate change</li><li>cause irreparable damage</li><li>clean energy</li><li>renewable resources</li><li>harm the environment</li><li>endangered species</li></ul>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Key Collocations</div>
+  <h2>Poverty & Society</h2>
+  <ul class="colloc-grid"><li>alleviate poverty</li><li>extreme poverty</li><li>below the poverty line</li><li>welfare programs</li><li>homeless shelters</li><li>live on the margins of society</li><li>make ends meet</li><li>reduce the gap between rich and poor</li><li>disadvantaged backgrounds</li></ul>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Key Collocations</div>
+  <h2>Global Problems</h2>
+  <ul class="colloc-grid"><li>die of hunger</li><li>food shortages</li><li>preventable diseases</li><li>child labor</li><li>human trafficking</li><li>sexual exploitation</li><li>address a global problem</li><li>contribute to a problem</li><li>find a long-term solution</li></ul>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Speaking Frames</div>
+  <h2>Useful Speaking Frames</h2>
+  <div class="frame-grid"><div class="frame-block"><h3>Giving an opinion</h3><ul class="frame-list"><li>I think one of the biggest problems is...</li><li>In my opinion,...</li><li>From my perspective,...</li></ul></div><div class="frame-block"><h3>Explaining causes</h3><ul class="frame-list"><li>One of the main causes is...</li><li>This can be caused by...</li><li>This is partly because...</li></ul></div></div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Speaking Frames</div>
+  <h2>Useful Speaking Frames</h2>
+  <div class="frame-grid"><div class="frame-block"><h3>Explaining effects</h3><ul class="frame-list"><li>This can lead to...</li><li>This can contribute to...</li><li>As a result,...</li><li>This can have a serious impact on...</li></ul></div><div class="frame-block"><h3>Suggesting solutions</h3><ul class="frame-list"><li>Governments should...</li><li>One possible solution would be to...</li><li>We need to focus on...</li><li>We should invest more in...</li></ul></div></div>
+</div>
+
+
+<div class="slide">
+  <div class="eyebrow">Speaking Frames</div>
+  <h2>Useful Speaking Frames</h2>
+  <div class="frame-grid"><div class="frame-block"><h3>Balancing ideas</h3><ul class="frame-list"><li>On the one hand,... On the other hand,...</li><li>Although..., ...</li><li>However,...</li><li>At the same time,...</li></ul></div></div>
+</div>
+
+</div>
+
+<div class="nav">
+  <button id="prevBtn" aria-label="Previous slide">&#8592;</button>
+  <span class="counter"><span id="current">1</span> / <span id="total">45</span></span>
+  <button id="nextBtn" aria-label="Next slide">&#8594;</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  let idx = 0;
+
+  function showSlide(i){
+    slides[idx].classList.remove('active');
+    idx = Math.max(0, Math.min(i, slides.length - 1));
+    slides[idx].classList.add('active');
+    document.getElementById('current').textContent = idx + 1;
+    document.getElementById('prevBtn').disabled = idx === 0;
+    document.getElementById('nextBtn').disabled = idx === slides.length - 1;
+  }
+
+  document.getElementById('prevBtn').addEventListener('click', () => showSlide(idx - 1));
+  document.getElementById('nextBtn').addEventListener('click', () => showSlide(idx + 1));
+
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowRight') showSlide(idx + 1);
+    if(e.key === 'ArrowLeft') showSlide(idx - 1);
+  });
+
+  document.querySelectorAll('.reveal-btn').forEach(btn => {
+    const showLabel = btn.textContent;
+    const hideLabel = showLabel.replace('Show', 'Hide');
+    btn.addEventListener('click', () => {
+      const content = btn.nextElementSibling;
+      const isOpen = content.classList.toggle('open');
+      btn.textContent = isOpen ? hideLabel : showLabel;
+    });
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>
